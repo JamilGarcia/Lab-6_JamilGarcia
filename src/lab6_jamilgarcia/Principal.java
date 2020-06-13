@@ -1,6 +1,6 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template file, choose Tools / Templates
  * and open the template in the editor.
  */
 package lab6_jamilgarcia;
@@ -574,9 +574,11 @@ public class Principal extends javax.swing.JFrame {
             Uni.add(new Universo(nombre));
             int j = jl_SerVivoUn.getSelectedIndex();
             SV = SereV.get(j);
-            Uni.get(Uni.size()).seres.add(SV);
-            SereV.get(Uni.size()).setUniversoSV(Uni.size());
+            Uni.get(Uni.size() - 1).seres.add(SV);
+            System.out.println(Uni.size());
+            SereV.get(Uni.size() - 1).setUniversoSV(Uni.size() - 1);
             JOptionPane.showMessageDialog(this, "Accion con exito");
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Algo salió mal, revise los datos");
         }
@@ -624,7 +626,43 @@ public class Principal extends javax.swing.JFrame {
             if (l > -1) {
                 SereV.remove(j);
                 Uni.get(l).seres.remove(j);
+                DefaultListModel lista
+                        = (DefaultListModel) jl_SeresVivosM.getModel();
+                DefaultListModel lista2
+                        = (DefaultListModel) jl_UniversosM.getModel();
+                lista.removeAllElements();
+                lista2.removeAllElements();
+                jl_SeresVivosM.setModel(lista);
+                jl_UniversosM.setModel(lista2);
+
+                for (int i = 0; i < SereV.size(); i++) {
+                    lista.addElement(SereV.get(i));
+                }
+
+                for (int i = 0; i < Uni.size(); i++) {
+                    lista2.addElement(Uni.get(i));
+                }
+                jl_SeresVivosM.setModel(lista);
+                jl_UniversosM.setModel(lista2);
             } else {
+                DefaultListModel lista
+                        = (DefaultListModel) jl_SeresVivosM.getModel();
+                DefaultListModel lista2
+                        = (DefaultListModel) jl_UniversosM.getModel();
+                lista.removeAllElements();
+                lista2.removeAllElements();
+                jl_SeresVivosM.setModel(lista);
+                jl_UniversosM.setModel(lista2);
+
+                for (int i = 0; i < SereV.size(); i++) {
+                    lista.addElement(SereV.get(i));
+                }
+
+                for (int i = 0; i < Uni.size(); i++) {
+                    lista2.addElement(Uni.get(i));
+                }
+                jl_SeresVivosM.setModel(lista);
+                jl_UniversosM.setModel(lista2);
                 SereV.remove(j);
             }
             JOptionPane.showMessageDialog(this, "Accion con exito");
@@ -645,9 +683,10 @@ public class Principal extends javax.swing.JFrame {
                 = (DefaultListModel) jl_SeresVivosM.getModel();
         DefaultListModel lista2
                 = (DefaultListModel) jl_UniversosM.getModel();
-         jl_SeresVivosM.setModel(lista);
+        lista.removeAllElements();
+        lista2.removeAllElements();
+        jl_SeresVivosM.setModel(lista);
         jl_UniversosM.setModel(lista2);
-        
 
         for (int i = 0; i < SereV.size(); i++) {
             lista.addElement(SereV.get(i));
@@ -665,6 +704,8 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultListModel lista2
                 = (DefaultListModel) jl_SerVivoUn.getModel();
+        lista2.removeAllElements();
+        jl_SerVivoUn.setModel(lista2);
         for (int i = 0; i < SereV.size(); i++) {
             lista2.addElement(SereV.get(i));
 
@@ -683,6 +724,31 @@ public class Principal extends javax.swing.JFrame {
         File f = null;
         FileWriter fw = null;
         BufferedWriter bw = null;
+        for (int i = 0; i < Uni.size(); i++) {
+            try {
+            f = new File("./universos.txt");
+            fw = new FileWriter(f, true); //OJO 
+            bw = new BufferedWriter(fw);
+            String u, p, r;
+            u = Uni.get(i).getNombre();
+            bw.write(u+"/");
+            bw.flush();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+            try {
+                bw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         for (int i = 0; i < SereV.size(); i++) {
             int a = SereV.get(i).getUniversoSV();
             String nombre, planeta, tipo;
@@ -695,42 +761,46 @@ public class Principal extends javax.swing.JFrame {
             switch (a) {
                 case 0:
                     try {
-                        f = new File("./ficheros/universo0.txt");
-                        fw = new FileWriter(f, true); //OJO 
+                        f = new File("./universo0.txt");
+                        fw = new FileWriter(f, false); //OJO 
                         bw = new BufferedWriter(fw);
                         String u, p, r, s, t;
-                        bw.write(nombre + "|");
-                        bw.write(poder + "|");
-                        bw.write(anios + "|");
-                        bw.write(planeta + "|");
-                        bw.write(tipo + "|");
+                        bw.write(nombre + "/");
+                        bw.write(poder + "/");
+                        bw.write(anios + "/");
+                        bw.write(planeta + "/");
+                        bw.write(tipo + "/");
                         bw.flush();
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    try {
-                        bw.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    try {
-                        fw.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            {
+                try {
+                    bw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            {
+                try {
+                    fw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
                     break;
                 case 1:
                     try {
-                        f = new File("./ficheros/universo1.txt");
+                        f = new File("./universo1.txt");
                         fw = new FileWriter(f, true); //OJO 
                         bw = new BufferedWriter(fw);
                         String u, p, r, s, t;
-                        bw.write(nombre + "|");
-                        bw.write(poder + "|");
-                        bw.write(anios + "|");
-                        bw.write(planeta + "|");
-                        bw.write(tipo + "|");
+                        bw.write(nombre + "/");
+                        bw.write(poder + "/");
+                        bw.write(anios + "/");
+                        bw.write(planeta + "/");
+                        bw.write(tipo + "/");
                         bw.flush();
 
                     } catch (Exception e) {
@@ -749,15 +819,15 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 2:
                     try {
-                        f = new File("./ficheros/Gintama.txt");
+                        f = new File("./Gintama.txt");
                         fw = new FileWriter(f, true); //OJO 
                         bw = new BufferedWriter(fw);
                         String u, p, r, s, t;
-                        bw.write(nombre + "|");
-                        bw.write(poder + "|");
-                        bw.write(anios + "|");
-                        bw.write(planeta + "|");
-                        bw.write(tipo + "|");
+                        bw.write(nombre + "/");
+                        bw.write(poder + "/");
+                        bw.write(anios + "/");
+                        bw.write(planeta + "/");
+                        bw.write(tipo + "/");
                         bw.flush();
 
                     } catch (Exception e) {
@@ -776,16 +846,16 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 3:
                     try {
-                        f = new File("./ficheros/universo3.txt");
+                        f = new File("./universo3.txt");
                         fw = new FileWriter(f, true); //OJO 
                         bw = new BufferedWriter(fw);
                         String u, p, r, s, t;
-                        bw.write(nombre + "|");
-                        bw.write(poder + "|");
-                        bw.write(anios + "|");
-                        bw.write(planeta + "|");
-                        bw.write(tipo + "|");
-                        bw.write(tipo + "|");
+                        bw.write(nombre + "/");
+                        bw.write(poder + "/");
+                        bw.write(anios + "/");
+                        bw.write(planeta + "/");
+                        bw.write(tipo + "/");
+                        bw.write(tipo + "/");
                         bw.flush();
 
                     } catch (Exception e) {
@@ -805,15 +875,15 @@ public class Principal extends javax.swing.JFrame {
 
                 case 4:
                     try {
-                        f = new File("./ficheros/universo4.txt");
+                        f = new File("./universo4.txt");
                         fw = new FileWriter(f, true); //OJO 
                         bw = new BufferedWriter(fw);
                         String u, p, r, s, t;
-                        bw.write(nombre + "|");
-                        bw.write(poder + "|");
-                        bw.write(anios + "|");
-                        bw.write(planeta + "|");
-                        bw.write(tipo + "|");
+                        bw.write(nombre + "/");
+                        bw.write(poder + "/");
+                        bw.write(anios + "/");
+                        bw.write(planeta + "/");
+                        bw.write(tipo + "/");
                         bw.flush();
 
                     } catch (Exception e) {
@@ -831,7 +901,7 @@ public class Principal extends javax.swing.JFrame {
                     }
                     break;
                 default:
-                    System.out.println("El programa llegó a su limte de universos (5)");
+                    break;
             }
         }
 
@@ -842,26 +912,56 @@ public class Principal extends javax.swing.JFrame {
         File f = null;
         FileReader fr = null;
         BufferedReader br = null;
+        try {
+            f = new File("./universos.txt");
+            fr = new FileReader(f);
+            br = new BufferedReader(fr);
+            String linea;
+            String[] tokens;
+            while ((linea = br.readLine()) != null) {
+                tokens = linea.split("/");
+                Uni.add(new Universo(tokens[0]));
+                tokens = null;
+                
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+        try {
+            br.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            fr.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (int i = 0; i < 5; i++) {
             switch (i) {
                 case 0:
                     try {
-                        f = new File("./ficheros/universo0.txt");
+                        f = new File("./universo0.txt");
                         fr = new FileReader(f);
                         br = new BufferedReader(fr);
                         String nombre, planeta, raza, linea;
                         int poder, anios, cont = 0;
-                        String[] tokens;
+                        String[] tokens, limpiar = null;
                         while ((linea = br.readLine()) != null) {
-                            tokens = linea.split("|");
+                            tokens = linea.split("/");
                             cont++;
-                            if (cont == 5) {
+                            if (cont <= 5) {
+                                System.out.println(tokens);
                                 cont = 0;
                                 SereV.add(new SeresVivos(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), tokens[3], tokens[4], 0));
-                                tokens = null;
+                                tokens = limpiar;
+                                 System.out.println(SereV);
                             }
 
                         }
+                        System.out.println(SereV);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -884,14 +984,14 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 1:
                     try {
-                        f = new File("./ficheros/universo1.txt");
+                        f = new File("./universo1.txt");
                         fr = new FileReader(f);
                         br = new BufferedReader(fr);
                         String nombre, planeta, raza, linea;
                         int poder, anios, cont = 0;
                         String[] tokens;
                         while ((linea = br.readLine()) != null) {
-                            tokens = linea.split("|");
+                            tokens = linea.split("/");
                             cont++;
                             if (cont == 5) {
                                 cont = 0;
@@ -922,14 +1022,14 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 2:
                     try {
-                        f = new File("./ficheros/Gintama.txt");
+                        f = new File("./Gintama.txt");
                         fr = new FileReader(f);
                         br = new BufferedReader(fr);
                         String nombre, planeta, raza, linea;
                         int poder, anios, cont = 0;
                         String[] tokens;
                         while ((linea = br.readLine()) != null) {
-                            tokens = linea.split("|");
+                            tokens = linea.split("/");
                             cont++;
                             if (cont == 5) {
                                 cont = 0;
@@ -960,14 +1060,14 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 3:
                     try {
-                        f = new File("./ficheros/universo3.txt");
+                        f = new File("./universo3.txt");
                         fr = new FileReader(f);
                         br = new BufferedReader(fr);
                         String nombre, planeta, raza, linea;
                         int poder, anios, cont = 0;
                         String[] tokens;
                         while ((linea = br.readLine()) != null) {
-                            tokens = linea.split("|");
+                            tokens = linea.split("/");
                             cont++;
                             if (cont == 5) {
                                 cont = 0;
@@ -998,14 +1098,14 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 case 4:
                     try {
-                        f = new File("./ficheros/universo4.txt");
+                        f = new File("./universo4.txt");
                         fr = new FileReader(f);
                         br = new BufferedReader(fr);
                         String nombre, planeta, raza, linea;
                         int poder, anios, cont = 0;
                         String[] tokens;
                         while ((linea = br.readLine()) != null) {
-                            tokens = linea.split("|");
+                            tokens = linea.split("/");
                             cont++;
                             if (cont == 5) {
                                 cont = 0;
@@ -1035,16 +1135,19 @@ public class Principal extends javax.swing.JFrame {
                     }
                     break;
                 default:
-                    throw new AssertionError();
+                    
             }
+        }
+        
+        for (int i = 0; i < SereV.size(); i++) {
+            int j = SereV.get(i).getUniversoSV();
+            Uni.get(j).seres.add(SereV.get(i));
         }
     }//GEN-LAST:event_b_CargarMouseClicked
 
     /**
      * @param args the command line arguments
      */
-  
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
